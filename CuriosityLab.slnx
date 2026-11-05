@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/core/">
+    <Project Path="src/core/CodeInvention.CuriosityLab.Application/CodeInvention.CuriosityLab.Application.csproj" />
+    <Project Path="src/core/CodeInvention.CuriosityLab.Domain/CodeInvention.CuriosityLab.Domain.csproj" />
+    <Project Path="src/core/CodeInvention.CuriosityLab.Persistence/CodeInvention.CuriosityLab.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/cross-cutting/">
+    <Project Path="src/cross-cutting/CodeInvention.CuriosityLab.Common/CodeInvention.CuriosityLab.Common.csproj" />
+  </Folder>
+  <Folder Name="/src/infrastructure/">
+    <Project Path="src/infrastructure/CodeInvention.CuriosityLab.Infrastructure/CodeInvention.CuriosityLab.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/presentation/">
+    <Project Path="src/presentation/CodeInvention.CuriosityLab.Web.API/CodeInvention.CuriosityLab.Web.API.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CodeInvention.CuriosityLab.Application.Test/CodeInvention.CuriosityLab.Application.Test.csproj" />
+  </Folder>
+</Solution>
