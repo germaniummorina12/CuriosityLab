@@ -21,7 +21,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             {
                 var users = await _context.Users
                     .Select(user => new Response(user.Id, user.Name, user.Email, user.Age))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken: cancellationToken);
 
                 return users;
             }

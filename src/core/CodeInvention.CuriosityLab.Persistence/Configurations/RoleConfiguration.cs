@@ -22,8 +22,8 @@ namespace CodeInvention.CuriosityLab.Persistence.Configurations
                 .HasColumnName("CreatedAt")
                 .IsRequired(false);
 
-            builder.Property(x => x.CreatedBy)
-                .HasColumnName("CreatedBy")
+            builder.Property(x => x.UpdatedAt)
+                .HasColumnName("UpdatedAt")
                 .IsRequired(false);
 
             builder.Property(x => x.IsDeleted)
@@ -31,7 +31,12 @@ namespace CodeInvention.CuriosityLab.Persistence.Configurations
                 .HasDefaultValue(false)
                 .IsRequired(false);
 
+            Constrains(builder);
             builder.ToTable("Roles");
+        }
+        private void Constrains(EntityTypeBuilder<Role> builder)
+        {
+            builder.HasQueryFilter(p => p.IsDeleted == false);
         }
     }
 }

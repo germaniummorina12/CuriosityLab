@@ -40,6 +40,7 @@ namespace CodeInvention.CuriosityLab.Persistence.Configurations
                 .IsRequired(false);
 
             Constrains(builder);
+
             builder.ToTable("Users");
         }
 
