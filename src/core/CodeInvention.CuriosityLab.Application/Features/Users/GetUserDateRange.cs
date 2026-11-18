@@ -24,7 +24,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
 
                 var users = await _context.Users
                     .Where(user => user.CreatedAt >= from && user.CreatedAt <= until)
-                    .Select(user => new Response(user.Id, user.Name, user.Email, user.Age))
+                    .Select(user => new Response(user.Id, user.Name, user.Age))
                     .ToListAsync(cancellationToken);
 
                 if (users == null)
@@ -33,6 +33,6 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                 return users;
             }
         }
-        public record Response(int id, string name, string email, int? age);
+        public record Response(int id, string name, int? age);
     }
 }

@@ -20,12 +20,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             {
                 var users = await _context.Users
                     .Where(user => user.Age >= request.age)
-                    .Select(user => new Response(user.Id, user.Name, user.Email, user.Age))
+                    .Select(user => new Response(user.Id, user.Name, user.Age))
                     .ToListAsync();
 
                 return users;
             }
         }
-        public record Response(int id, string name, string email, int? age);
+        public record Response(int id, string name, int? age);
     }
 }

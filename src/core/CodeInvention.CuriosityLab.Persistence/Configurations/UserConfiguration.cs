@@ -18,10 +18,6 @@ namespace CodeInvention.CuriosityLab.Persistence.Configurations
                 .HasColumnName("Name")
                 .IsRequired();
 
-            builder.Property(x => x.Email)
-                .HasColumnName("Email")
-                .IsRequired();
-
             builder.Property(x => x.Age)
                 .HasColumnName("Age")
                 .IsRequired(false);

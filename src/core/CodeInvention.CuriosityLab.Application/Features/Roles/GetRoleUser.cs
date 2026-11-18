@@ -31,8 +31,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
                     .Where(user => user.UserRoles.Any(role => role.RoleId == request.id))
                     .Select(user => new Response(
                         user.Id, 
-                        user.Name, 
-                        user.Email, 
+                        user.Name,
                         user.Age, 
                         user.Addresses
                             .Select(address => new AddressResponse(
@@ -47,7 +46,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
                 return users;
             }
         }
-        public record Response(int id, string name, string email, int? age, List<AddressResponse> addresses);
+        public record Response(int id, string name, int? age, List<AddressResponse> addresses);
         public record AddressResponse(string? city, string? street, string? postalCode);
     }
 }

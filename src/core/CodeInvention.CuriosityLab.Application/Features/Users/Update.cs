@@ -7,7 +7,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
 {
     public class Update
     {
-        public record Command(int id, string name, string email, int? age) : IRequest;
+        public record Command(int id, string name, int? age) : IRequest;
         public class CommandHandler : IRequestHandler<Command>
         {
             private IApplicationDbContext _context;
@@ -27,7 +27,6 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                 }
                 
                 user.Name = request.name;
-                user.Email = request.email;
                 user.Age = request.age;
                 user.UpdatedAt = DateTime.UtcNow;
 
@@ -47,16 +46,16 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                     .NotEmpty()
                     .WithMessage("Name is Required");
 
-                RuleFor(user => user.email)
-                    .NotEmpty()
-                    .WithMessage("Email is Required")
-                    .EmailAddress()
-                    .WithMessage("Email not Valid")
-                    .Must((command, email) =>
-                    {
-                        return !_context.Users.Any(u => u.Id != command.id && u.Email == command.email);
-                    })
-                    .WithMessage("This email is used for another account");
+                //RuleFor(user => user.email)
+                //    .NotEmpty()
+                //    .WithMessage("Email is Required")
+                //    .EmailAddress()
+                //    .WithMessage("Email not Valid")
+                //    .Must((command, email) =>
+                //    {
+                //        return !_context.Users.Any(u => u.Id != command.id && u.Email == command.email);
+                //    })
+                //    .WithMessage("This email is used for another account");
             }
         }
     }

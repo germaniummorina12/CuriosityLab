@@ -63,19 +63,20 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("search-name-email/{input}")]
-        public async Task<IActionResult> GetByNameOrEmail(string input)
-        {
-            var result = await Mediator.Send(new GetByNameOrEmail.Query(input));
-            return Ok(result);
-        }
+        //[HttpGet("search-name-email/{input}")]
+        //public async Task<IActionResult> GetByNameOrEmail(string input)
+        //{
+        //    var result = await Mediator.Send(new GetByNameOrEmail.Query(input));
+        //    return Ok(result);
+        //}
 
-        [HttpGet("search-email-domain/{input}")]
-        public async Task<IActionResult> GetByEmailDomain(string input)
-        {
-            var result = await Mediator.Send(new GetByEmailDomain.Query(input));
-            return Ok(result);
-        }
+        //[HttpGet("search-email-domain/{input}")]
+        //public async Task<IActionResult> GetByEmailDomain(string input)
+        //{
+        //    var result = await Mediator.Send(new GetByEmailDomain.Query(input));
+        //    return Ok(result);
+        //}
+
         [HttpGet("user-roles/{id}")]
         public async Task<IActionResult> GetUserRoles(int id)
         {

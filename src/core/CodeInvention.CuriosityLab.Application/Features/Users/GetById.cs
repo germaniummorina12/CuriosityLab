@@ -29,7 +29,6 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                 return new Response(
                     user.Id,
                     user.Name,
-                    user.Email,
                     user.Age,
                     user.Addresses
                         .Select(a => new AddressResponse(a.City, a.Street, a.PostalCode))
@@ -37,7 +36,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                 );
             }
         }
-        public record Response(int id, string name, string email, int? age, List<AddressResponse> addresses);
+        public record Response(int id, string name, int? age, List<AddressResponse> addresses);
         public record AddressResponse(string city, string street, string postalcode);
     }
 }

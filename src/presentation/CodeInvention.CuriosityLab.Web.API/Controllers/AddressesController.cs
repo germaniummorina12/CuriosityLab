@@ -99,5 +99,12 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             var result = await Mediator.Send(new GetDateRange.Query(fromDate, UntilDate));
             return Ok(result);
         }
+
+        [HttpGet("Get-user-specific-city/{city}")]
+        public async Task<IActionResult> GetSpecificCity(string city)
+        {
+            var result = await Mediator.Send(new GetSpecificCity.Query(city));
+            return Ok(result);
+        }
     }
 }

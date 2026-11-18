@@ -9,6 +9,8 @@ namespace CodeInvention.CuriosityLab.Application.Common.Abstractions
         DbSet<Role> Roles { get; set; }
         DbSet<UserRole> UserRoles { get; set; }
         DbSet<Address> Addresses { get; set; }
+        DbSet<Contact> Contacts { get; set; }
+        DbSet<ContactType> ContactTypes { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

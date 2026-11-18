@@ -22,13 +22,13 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
                 var users = await _context.Users
                     .Include(user => user.Addresses)
                     .Where(user => !user.Addresses.Any())
-                    .Select(user => new Response(user.Id, user.Name, user.Email, user.Age))
+                    .Select(user => new Response(user.Id, user.Name, user.Age))
                     .ToListAsync(cancellationToken);
 
                 return users;
             }
         }
 
-        public record Response(int id, string name, string email, int? age);
+        public record Response(int id, string name, int? age);
     }
 }

@@ -22,7 +22,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
                 var users = await _context.Users
                    .Include(user => user.Addresses)
                    .Where(user => user.Addresses.Count > 1)
-                   .Select(user => new Response(user.Id, user.Name, user.Email, user.Age, user.Addresses
+                   .Select(user => new Response(user.Id, user.Name, user.Age, user.Addresses
                            .Select(address => new AddressResponse(
                                address.City,
                                address.Street,
@@ -33,7 +33,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
                 return users;
             }
         }
-        public record Response(int id, string name, string email, int? age, List<AddressResponse> addresses);
+        public record Response(int id, string name, int? age, List<AddressResponse> addresses);
         public record AddressResponse(string city, string street, string postalCode);
     }
 }

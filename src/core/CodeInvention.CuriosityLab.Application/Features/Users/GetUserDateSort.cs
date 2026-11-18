@@ -21,12 +21,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             {
                 var users = await _context.Users
                     .OrderByDescending(user => user.CreatedAt)
-                    .Select(u => new Response(u.Id, u.Name, u.Email, u.Age))
+                    .Select(u => new Response(u.Id, u.Name, u.Age))
                     .ToListAsync(cancellationToken);
 
                 return users;
             }
         }
-        public record Response(int id, string name, string email, int? age);
+        public record Response(int id, string name, int? age);
     }
 }
