@@ -1,9 +1,7 @@
 ﻿using CodeInvention.CuriosityLab.Application.Common.Abstractions;
 using CodeInvention.CuriosityLab.Domain.Entities;
 using FluentValidation;
-using FluentValidation.Validators;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeInvention.CuriosityLab.Application.Features.Users
 {
@@ -37,8 +35,10 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
         }
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IApplicationDbContext _context;
+            public CommandValidator(IApplicationDbContext context)
             {
+                _context = context;
                 RuleLevelCascadeMode = CascadeMode.Stop;
                 //ClassLevelCascadeMode = CascadeMode.Stop;
 
@@ -50,7 +50,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                    .NotEmpty()
                    .WithMessage("Email is Required")
                    .EmailAddress()
-                   .WithMessage("Email is not valid");
+                   .WithMessage("Email is not valid")
+                   .Must((email) =>
+                   {
+                       return !_context.Users.Any(u => u.Email == email);
+                   })
+                   .WithMessage("This email is used for another account");
             }
         }
     }

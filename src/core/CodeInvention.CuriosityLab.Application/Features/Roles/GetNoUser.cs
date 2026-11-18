@@ -21,6 +21,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
             public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var roles = await _context.Roles
+                    .Include(t => t.UserRoles)
                     .Where(role => !role.UserRoles.Any())
                     .Select(role => new Response(role.Name))
                     .ToListAsync(cancellationToken);

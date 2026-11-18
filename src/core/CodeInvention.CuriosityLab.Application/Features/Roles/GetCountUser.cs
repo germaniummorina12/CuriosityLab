@@ -6,9 +6,9 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
 {
     public class GetCountUser
     {
-        public record Query() : IRequest<Response>;
+        public record Query() : IRequest<IEnumerable<Response>>;
 
-        public class QueryHandler : IRequestHandler<Query, Response>
+        public class QueryHandler : IRequestHandler<Query, IEnumerable<Response>>
         {
             private readonly IApplicationDbContext _context;
 
@@ -17,20 +17,17 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
                 _context = context;
             }
 
-            public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var admin = await _context.Users
-                    .Include(role => role.UserRoles)
-                        .ThenInclude(t => t.Role)
-                    .CountAsync(user => user.UserRoles.Any(role => role.Role.Id == 1), cancellationToken);
-
-                var user = await _context.Users
-                    .Include(role => role.UserRoles)
-                        .ThenInclude(t => t.Role)
-                    .CountAsync(user => user.UserRoles.Any(role => role.Role.Id == 2), cancellationToken);
-                return new Response(admin, user);
+                var roles = await _context.Roles
+                    .Include(userRole => userRole.UserRoles)
+                    .Select(role =>
+                        new Response(role.Name,
+                            role.UserRoles.Count()))
+                    .ToListAsync(cancellationToken);
+                return roles;
             }
         }
-        public record Response(int admin, int user);
+        public record Response(string role, int user);
     }
 }

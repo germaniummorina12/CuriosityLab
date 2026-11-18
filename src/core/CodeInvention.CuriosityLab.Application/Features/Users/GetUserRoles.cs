@@ -26,13 +26,16 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
 
                 if (user == null)
                     throw new ArgumentException("User doesn't exists.");
-
-                var response = new Response(user.UserRoles
-                    .Select(role => role.Role.Name).ToList());
+                
+                var response = new Response(
+                    user.UserRoles
+                        .Select(role => role.Role.Name)
+                        .ToList()
+                );
 
                 return response;
             }
         }
-        public record Response(List<string> Roles);
+        public record Response(List<string> roles);
     }
 }

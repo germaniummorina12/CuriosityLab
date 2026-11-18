@@ -22,6 +22,55 @@ namespace CodeInvention.CuriosityLab.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CodeInvention.CuriosityLab.Domain.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("Id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("City");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<bool?>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Postal_Code");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Street");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("User_Id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses", (string)null);
+                });
+
             modelBuilder.Entity("CodeInvention.CuriosityLab.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -127,6 +176,17 @@ namespace CodeInvention.CuriosityLab.Persistence.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("CodeInvention.CuriosityLab.Domain.Entities.Address", b =>
+                {
+                    b.HasOne("CodeInvention.CuriosityLab.Domain.Entities.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CodeInvention.CuriosityLab.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("CodeInvention.CuriosityLab.Domain.Entities.Role", "Role")
@@ -153,6 +213,8 @@ namespace CodeInvention.CuriosityLab.Persistence.Migrations
 
             modelBuilder.Entity("CodeInvention.CuriosityLab.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

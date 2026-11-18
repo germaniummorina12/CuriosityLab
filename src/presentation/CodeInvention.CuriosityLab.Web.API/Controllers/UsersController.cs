@@ -82,5 +82,85 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             var result = await Mediator.Send(new GetUserRoles.Query(id));
             return Ok(result);
         }
+
+        [HttpPut("update-age/{id}")]
+        public async Task<IActionResult> UpdateAge(UpdateAge.Command command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+
+        [HttpPut("remove-set-roles/{userId}")]
+        public async Task<IActionResult> UpdateUserSetRolese(UpdateUserSetRoles.Command command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpPut("restore-user/{id}")]
+        public async Task<IActionResult> RestoreUser(RestoreUser.Command command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+
+        [HttpDelete("bulk-delete")]
+        public async Task<IActionResult> BulkDelete(List<int> Ids)
+        {
+            await Mediator.Send(new BulkDelete.Command(Ids));
+            return NoContent();
+        }
+
+
+        [HttpGet("range-age")]
+        public async Task<IActionResult> GetUserAgeRange(int minAge, int maxAge)
+        {
+            var result = await Mediator.Send(new GetUserAgeRange.Query(minAge, maxAge));
+            return Ok(result);
+        }
+
+        [HttpGet("range-date")]
+        public async Task<IActionResult> GetUserDateRange(DateTime fromDate, DateTime UntilDate)
+        {
+            var result = await Mediator.Send(new GetUserDateRange.Query(fromDate, UntilDate));
+            return Ok(result);
+        }
+
+        [HttpGet("get-user-no-roles")]
+        public async Task<IActionResult> GetUserNoRole()
+        {
+            var result = await Mediator.Send(new GetUserNoRole.Query());
+            return Ok(result);
+        }
+
+        [HttpGet("get-user-no-age")]
+        public async Task<IActionResult> GetUserNoAge()
+        {
+            var result = await Mediator.Send(new GetUserNoAge.Query());
+            return Ok(result);
+        }
+
+        [HttpGet("sort-user-by-date")]
+        public async Task<IActionResult> GetUserDateSort()
+        {
+            var result = await Mediator.Send(new GetUserDateSort.Query());
+            return Ok(result);
+        }
+
+        [HttpGet("get-user-by-name/{input}")]
+        public async Task<IActionResult> GetUserByName(string input)
+        {
+            var result = await Mediator.Send(new GetUserByName.Query(input));
+            return Ok(result);
+        }
+
+        [HttpGet("get-total-number-of-users-and-roles")]
+        public async Task<IActionResult> GetTotalUserRole()
+        {
+            var result = await Mediator.Send(new GetTotalUserRole.Query());
+            return Ok(result);
+        }
     }
 }

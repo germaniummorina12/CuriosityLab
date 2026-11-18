@@ -37,8 +37,10 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
         }
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IApplicationDbContext _context;
+            public CommandValidator(IApplicationDbContext context)
             {
+                _context = context;
                 RuleLevelCascadeMode = CascadeMode.Stop;
 
                 RuleFor(user => user.name)
@@ -49,7 +51,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                     .NotEmpty()
                     .WithMessage("Email is Required")
                     .EmailAddress()
-                    .WithMessage("Email not Valid");
+                    .WithMessage("Email not Valid")
+                    .Must((command, email) =>
+                    {
+                        return !_context.Users.Any(u => u.Id != command.id && u.Email == command.email);
+                    })
+                    .WithMessage("This email is used for another account");
             }
         }
     }

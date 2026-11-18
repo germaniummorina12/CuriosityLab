@@ -19,16 +19,25 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
 
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.id);
+                var user = await _context.Users
+                    .Include(u => u.Addresses.Where(a => a.IsDeleted != true))
+                    .FirstOrDefaultAsync(u => u.Id == request.id, cancellationToken);
 
-                if(user == null)
-                    throw new ArgumentException("User doesn't exists.");
+                if (user == null)
+                    throw new ArgumentException("User doesn't exist.");
 
-                var response = new Response(user.Id, user.Name, user.Email, user.Age);
-
-                return response;
+                return new Response(
+                    user.Id,
+                    user.Name,
+                    user.Email,
+                    user.Age,
+                    user.Addresses
+                        .Select(a => new AddressResponse(a.City, a.Street, a.PostalCode))
+                        .ToList()
+                );
             }
         }
-        public record Response(int id, string name, string email, int? age);
+        public record Response(int id, string name, string email, int? age, List<AddressResponse> addresses);
+        public record AddressResponse(string city, string street, string postalcode);
     }
 }

@@ -27,7 +27,6 @@ namespace CodeInvention.CuriosityLab.Application.Infrastructure
             {
                 throw new ValidationException(failures);
             }
-
             return next();
         }
     }

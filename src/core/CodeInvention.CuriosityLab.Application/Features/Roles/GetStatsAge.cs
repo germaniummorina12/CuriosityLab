@@ -6,9 +6,9 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
 {
     public class GetStatsAge
     {
-        public record Query() : IRequest<Response>;
+        public record Query() : IRequest<IEnumerable<Response>>;
 
-        public class QueryHandler : IRequestHandler<Query, Response>
+        public class QueryHandler : IRequestHandler<Query, IEnumerable<Response>>
         {
             private readonly IApplicationDbContext _context;
 
@@ -16,37 +16,26 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
             {
                 _context = context;
             }
-            public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var minAgeAdmin = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 1))
-                    .MinAsync(user => user.Age, cancellationToken);
+                var roles = _context.Roles
+                    .Include(t => t.UserRoles)
+                        .ThenInclude(t => t.User)
+                    .Select(role => 
+                        new Response(
+                            role.Name, 
+                            role.UserRoles.Where(t => t.User.Age != null).Min(t => t.User.Age),
+                            role.UserRoles.Where(t => t.User.Age != null).Max(t => t.User.Age),
+                            role.UserRoles.Where(t => t.User.Age != null).Average(t => t.User.Age)
+                        )
+                    )
+                    .ToList();
 
-                var minAgeUser = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 2))
-                    .MinAsync(user => user.Age, cancellationToken);
-
-                var maxAgeAdmin = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 1))
-                    .MaxAsync(user => user.Age, cancellationToken);
-
-                var maxAgeUser = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 2))
-                    .MaxAsync(user => user.Age, cancellationToken);
-
-                var avgAgeAdmin = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 1))
-                    .AverageAsync(user => user.Age.Value, cancellationToken);
-
-                var avgAgeUser = await _context.Users
-                    .Where(user => user.UserRoles.Any(role => role.RoleId == 2))
-                    .AverageAsync(user => user.Age.Value, cancellationToken);
-
-                return new Response(avgAgeAdmin, avgAgeUser, minAgeAdmin, minAgeUser, maxAgeAdmin, maxAgeUser);
+                return roles;
             }
         }
 
-        public record Response(double? avgAgeAdmin, double? avgAgeUser, int? minAgeAdmin, int? minAgeUser, int? maxAgeAdmin, int? maxAgeUser);
+        public record Response(string role, int? minAgeUser, int? maxAgeUser, double? avgAgeUser);
     }
 
 }

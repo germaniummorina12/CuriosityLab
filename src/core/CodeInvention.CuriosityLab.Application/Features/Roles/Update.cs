@@ -37,13 +37,20 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
         }
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IApplicationDbContext _context;
+            public CommandValidator(IApplicationDbContext context)
             {
+                _context = context;
                 RuleLevelCascadeMode = CascadeMode.Stop;
 
                 RuleFor(role => role.name)
                     .NotEmpty()
-                    .WithMessage("Name is Required");
+                    .WithMessage("Name is Required")
+                    .Must((command, name) =>
+                    {
+                        return !_context.Roles.Any(role => role.Id != command.id && role.Name == name);
+                    })
+                    .WithMessage("This role already exists");
             }
         }
     }
