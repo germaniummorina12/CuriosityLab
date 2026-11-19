@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "E-Mail"
+  },
+  {
+    "id": 2,
+    "name": "Phone Number"
+  },
+  {
+    "id": 3,
+    "name": "Fax Number"
+  }
+]

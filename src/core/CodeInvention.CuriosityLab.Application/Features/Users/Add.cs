@@ -1,5 +1,6 @@
 ﻿using CodeInvention.CuriosityLab.Application.Common.Abstractions;
 using CodeInvention.CuriosityLab.Domain.Entities;
+using CodeInvention.CuriosityLab.Domain.Enums;
 using FluentValidation;
 using MediatR;
 
@@ -13,7 +14,15 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             {
                 Name = name,
                 Age = age,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Contacts =
+                {
+                    new Contact
+                    {
+                        ContactTypeId = (int)ContactTypeEnum.Email,
+                        Value = email
+                    }
+                }
             };
         }
         public class CommandHandler : IRequestHandler<Command>
@@ -45,16 +54,16 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
                     .NotEmpty()
                     .WithMessage("Name is Required");
 
-                //RuleFor(user => user.email)
-                //   .NotEmpty()
-                //   .WithMessage("Email is Required")
-                //   .EmailAddress()
-                //   .WithMessage("Email is not valid")
-                //   .Must((email) =>
-                //   {
-                //       return !_context.Users.Any(u => u.Email == email);
-                //   })
-                //   .WithMessage("This email is used for another account");
+                RuleFor(user => user.email)
+                   .NotEmpty()
+                   .WithMessage("Email is Required")
+                   .EmailAddress()
+                   .WithMessage("Email is not valid")
+                   .Must((email) =>
+                   {
+                       return !_context.Contacts.Any(u => u.Value == email && u.ContactTypeId == (int)ContactTypeEnum.Email);
+                   })
+                   .WithMessage("This email is used for another account");
             }
         }
     }

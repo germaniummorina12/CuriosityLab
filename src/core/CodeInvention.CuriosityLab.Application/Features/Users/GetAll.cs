@@ -1,7 +1,7 @@
 ﻿using CodeInvention.CuriosityLab.Application.Common.Abstractions;
+using CodeInvention.CuriosityLab.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static CodeInvention.CuriosityLab.Application.Features.Addresses.GetUserAddresses;
 
 namespace CodeInvention.CuriosityLab.Application.Features.Users
 {
@@ -22,7 +22,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             {
                 var users = await _context.Users
                     .Include(user => user.Addresses)
-                    .Select(user => new Response(user.Id, user.Name, user.Age, user.Addresses
+                    .Select(user => new Response(user.Id,user.Name, user.Contacts
+                        .Where(email => email.ContactTypeId == (int)ContactTypeEnum.Email)
+                        .Select(email => email.Value)
+                        .FirstOrDefault(), 
+                        user.Age, 
+                        user.Addresses
                             .Select(address => new AddressResponse(
                                 address.City,
                                 address.Street,
@@ -34,7 +39,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             }
         }
 
-        public record Response(int id, string email, int? age, List<AddressResponse> addresses);
+        public record Response(int id, string name, string? email, int? age, List<AddressResponse> addresses);
         public record AddressResponse(string city, string street, string postalCode);
     }
 }

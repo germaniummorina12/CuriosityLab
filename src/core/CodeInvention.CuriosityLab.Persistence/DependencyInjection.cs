@@ -13,7 +13,7 @@ namespace CodeInvention.CuriosityLab.Persistence
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(defaultConnectionString));
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-            services.AddScoped<IApplicationDbContextInitializer, ApplicationDbContextInitializer>();
+            services.AddScoped<ApplicationDbContextInitializer>();
             return services;
         }
     }

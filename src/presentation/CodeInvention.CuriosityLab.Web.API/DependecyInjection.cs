@@ -73,8 +73,8 @@ namespace CodeInvention.CuriosityLab.Web.API
 
             using (var scope = app.Services.CreateScope())
             {
-                var initializer = (ApplicationDbContextInitializer)scope.ServiceProvider.GetRequiredService<IApplicationDbContextInitializer>();
-                var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+                var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+                var context = (ApplicationDbContext)scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
                 initializer.Initialize(context);
             }
             return app;

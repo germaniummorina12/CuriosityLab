@@ -5,6 +5,14 @@ using CodeInvention.CuriosityLab.Web.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -25,6 +33,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 app.UsePresentation();
+app.UseCors("Frontend");
 app.MapControllers();
 
 app.Run();

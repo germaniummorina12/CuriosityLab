@@ -1,16 +1,47 @@
-﻿using CodeInvention.CuriosityLab.Application.Common.Abstractions;
+﻿using CodeInvention.CuriosityLab.Common.Extensions;
+using CodeInvention.CuriosityLab.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeInvention.CuriosityLab.Persistence
 {
-    public class ApplicationDbContextInitializer : IApplicationDbContextInitializer
+    public class ApplicationDbContextInitializer
     {
-        private ApplicationDbContext _context;
-
-        public void Initialize(IApplicationDbContext context)
+        public void Initialize(ApplicationDbContext context)
         {
-            _context = (ApplicationDbContext)context;
-            _context.Database.Migrate();
+            context.Database.Migrate();
+
+            Seed(context);
+        }
+
+        private void Seed(ApplicationDbContext context)
+        {
+            SeedContactTypes(context);
+        }
+
+        private void SeedContactTypes(ApplicationDbContext context)
+        {
+            if (!context.ContactTypes.Any())
+            {
+                var contactTypes = ReadJson("contactTypes.json").Deserialize<IEnumerable<ContactType>>();
+                context.ContactTypes.AddRange(contactTypes);
+                context.SaveChanges();
+            }
+        }
+
+        private string ReadJson(string fileName)
+        {
+            var assembly = typeof(ApplicationDbContext).Assembly;
+
+            var resources = assembly.GetManifestResourceNames();
+
+            using (Stream strem = assembly.GetManifestResourceStream(resources.First(x => x.Contains(fileName))))
+            {
+                using (StreamReader sr = new StreamReader(strem))
+                {
+                    var result = sr.ReadToEnd();
+                    return result;
+                }
+            }
         }
     }
 }
