@@ -16,6 +16,7 @@ namespace CodeInvention.CuriosityLab.Persistence
         private void Seed(ApplicationDbContext context)
         {
             SeedContactTypes(context);
+            SeedRoles(context);
         }
 
         private void SeedContactTypes(ApplicationDbContext context)
@@ -24,6 +25,16 @@ namespace CodeInvention.CuriosityLab.Persistence
             {
                 var contactTypes = ReadJson("contactTypes.json").Deserialize<IEnumerable<ContactType>>();
                 context.ContactTypes.AddRange(contactTypes);
+                context.SaveChanges();
+            }
+        }
+
+        private void SeedRoles(ApplicationDbContext context)
+        {
+            if (!context.Roles.Any())
+            {
+                var roles = ReadJson("roles.json").Deserialize<IEnumerable<Role>>();
+                context.Roles.AddRange(roles);
                 context.SaveChanges();
             }
         }
