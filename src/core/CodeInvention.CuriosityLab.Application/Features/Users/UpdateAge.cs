@@ -9,7 +9,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
         public record Command(int id, int? age) : IRequest;
         public class CommandHandler : IRequestHandler<Command>
         {
-            private IApplicationDbContext _context;
+            private readonly IApplicationDbContext _context;
 
             public CommandHandler(IApplicationDbContext context)
             {

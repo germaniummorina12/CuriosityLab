@@ -1,5 +1,5 @@
 ﻿using CodeInvention.CuriosityLab.Application.Features.Addresses;
-using CodeInvention.DesireERP.Web.API.Controllers.Base;
+using CodeInvention.CuriosityLab.Web.API.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeInvention.CuriosityLab.Web.API.Controllers
@@ -73,20 +73,20 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
         }
 
 
-        [HttpGet("Search-street/{street}")]
+        [HttpGet("search-street/{street}")]
         public async Task<IActionResult> GetByStreet(string street)
         {
             var result = await Mediator.Send(new GetByStreet.Query(street));
             return Ok(result);
         }
 
-        [HttpGet("Search-city/{city}")]
+        [HttpGet("search-city/{city}")]
         public async Task<IActionResult> GetByCity(string city)
         {
             var result = await Mediator.Send(new GetByCity.Query(city));
             return Ok(result);
         }
-        [HttpGet("Common-city")]
+        [HttpGet("common-city")]
         public async Task<IActionResult> GetCommonCity()
         {
             var result = await Mediator.Send(new GetCommonCity.Query());
@@ -100,11 +100,18 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get-user-specific-city/{city}")]
+        [HttpGet("get-user-specific-city/{city}")]
         public async Task<IActionResult> GetSpecificCity(string city)
         {
             var result = await Mediator.Send(new GetSpecificCity.Query(city));
             return Ok(result);
+        }
+
+        [HttpPut("restore-address/{id}")]
+        public async Task<IActionResult> Restore(Restore.Command command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }

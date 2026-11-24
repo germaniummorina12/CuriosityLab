@@ -18,7 +18,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
             }
             public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var roles = _context.Roles
+                var roles = await _context.Roles
                     .Include(t => t.UserRoles)
                         .ThenInclude(t => t.User)
                     .Select(role => 
@@ -29,7 +29,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
                             role.UserRoles.Where(t => t.User.Age != null).Average(t => t.User.Age)
                         )
                     )
-                    .ToList();
+                    .ToListAsync(cancellationToken);
 
                 return roles;
             }

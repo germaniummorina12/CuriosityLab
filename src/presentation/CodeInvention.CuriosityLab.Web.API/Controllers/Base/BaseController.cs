@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CodeInvention.DesireERP.Web.API.Controllers.Base
+namespace CodeInvention.CuriosityLab.Web.API.Controllers.Base
 {
     //[Authorize]
     [ApiController]

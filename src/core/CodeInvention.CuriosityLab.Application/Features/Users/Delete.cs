@@ -10,7 +10,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
 
         public class CommandHandler : IRequestHandler<Command>
         {
-            private IApplicationDbContext _context;
+            private readonly IApplicationDbContext _context;
 
             public CommandHandler(IApplicationDbContext context)
             {

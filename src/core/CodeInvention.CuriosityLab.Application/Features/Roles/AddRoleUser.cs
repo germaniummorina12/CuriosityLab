@@ -50,13 +50,20 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IApplicationDbContext _context;
+            public CommandValidator(IApplicationDbContext context)
             {
+                _context = context;
                 RuleLevelCascadeMode = CascadeMode.Stop;
 
                 RuleFor(role => role.roleId)
                     .NotEmpty()
-                    .WithMessage("Role is required");
+                    .WithMessage("Role is required")
+                     .Must((command, roleId) =>
+                      {
+                          return !_context.UserRoles.Any(role => role.RoleId == roleId && command.userId == role.UserId);
+                      })
+                      .WithMessage("This role has been assigned to the user before");
 
                 RuleFor(user => user.userId)
                     .NotEmpty()

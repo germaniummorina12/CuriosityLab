@@ -20,7 +20,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Users
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .Include(u => u.Addresses.Where(a => a.IsDeleted != true))
+                    .Include(u => u.Addresses)
                     .FirstOrDefaultAsync(u => u.Id == request.id, cancellationToken);
 
                 if (user == null)

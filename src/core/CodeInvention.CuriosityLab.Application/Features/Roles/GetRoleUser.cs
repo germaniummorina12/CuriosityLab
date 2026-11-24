@@ -23,7 +23,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Roles
                     .AnyAsync(role => role.Id == request.id, cancellationToken);
 
                 if (!role)
-                    throw new ArgumentException("User doesn't exists.");
+                    throw new ArgumentException("Role doesn't exists.");
 
                 var users = await _context.Users
                     .Include(t => t.UserRoles)

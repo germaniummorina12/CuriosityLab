@@ -1,5 +1,5 @@
 ﻿using CodeInvention.CuriosityLab.Application.Features.Users;
-using CodeInvention.DesireERP.Web.API.Controllers.Base;
+using CodeInvention.CuriosityLab.Web.API.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeInvention.CuriosityLab.Web.API.Controllers
@@ -63,19 +63,19 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("search-name-email/{input}")]
-        //public async Task<IActionResult> GetByNameOrEmail(string input)
-        //{
-        //    var result = await Mediator.Send(new GetByNameOrEmail.Query(input));
-        //    return Ok(result);
-        //}
+        [HttpGet("search-name-email/{text}")]
+        public async Task<IActionResult> GetByNameOrEmail(string text)
+        {
+            var result = await Mediator.Send(new GetByNameOrEmail.Query(text));
+            return Ok(result);
+        }
 
-        //[HttpGet("search-email-domain/{input}")]
-        //public async Task<IActionResult> GetByEmailDomain(string input)
-        //{
-        //    var result = await Mediator.Send(new GetByEmailDomain.Query(input));
-        //    return Ok(result);
-        //}
+        [HttpGet("search-email-domain/{email}")]
+        public async Task<IActionResult> GetByEmailDomain(string email)
+        {
+            var result = await Mediator.Send(new GetByEmailDomain.Query(email));
+            return Ok(result);
+        }
 
         [HttpGet("user-roles/{id}")]
         public async Task<IActionResult> GetUserRoles(int id)
@@ -91,9 +91,8 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return NoContent();
         }
 
-
         [HttpPut("remove-set-roles/{userId}")]
-        public async Task<IActionResult> UpdateUserSetRolese(UpdateUserSetRoles.Command command)
+        public async Task<IActionResult> UpdateUserSetRoles(UpdateUserSetRoles.Command command)
         {
             await Mediator.Send(command);
             return NoContent();
@@ -106,14 +105,12 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return NoContent();
         }
 
-
         [HttpDelete("bulk-delete")]
         public async Task<IActionResult> BulkDelete(List<int> Ids)
         {
             await Mediator.Send(new BulkDelete.Command(Ids));
             return NoContent();
         }
-
 
         [HttpGet("range-age")]
         public async Task<IActionResult> GetUserAgeRange(int minAge, int maxAge)

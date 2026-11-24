@@ -7,11 +7,11 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
 {
     public class Add
     {
-        public record Command(int id, string city, string street, string postalCode) : IRequest
+        public record Command(int userId, string city, string street, string postalCode) : IRequest
         {
             public Address toEntity() => new Address
             {
-                UserId = id,
+                UserId = userId,
                 City = city,
                 Street = street,
                 PostalCode = postalCode,
@@ -43,7 +43,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
 
             public CommandValidator(IApplicationDbContext context)
             {
-                _context= context;
+                _context = context;
                 RuleLevelCascadeMode = CascadeMode.Stop;
 
                 RuleFor(address => address.city)
@@ -58,12 +58,22 @@ namespace CodeInvention.CuriosityLab.Application.Features.Addresses
                     .NotEmpty()
                     .WithMessage("Postal Code is required");
 
-                RuleFor(user => user.id)
+                RuleFor(user => user.userId)
                     .Must((id) =>
                     {
                         return _context.Users.Any(user => user.Id == id);
                     })
                     .WithMessage("No user found with this id!");
+
+                RuleFor(user => user.userId)
+                    .Must((command, userId) =>
+                    {
+                        return !_context.Addresses.Any(user => user.UserId == userId && 
+                            command.city == user.City && 
+                            command.street == user.Street && 
+                            command.postalCode == user.PostalCode);
+                    })
+                    .WithMessage("This address has already been added.");
             }
         }
     }

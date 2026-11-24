@@ -1,5 +1,5 @@
 ﻿using CodeInvention.CuriosityLab.Application.Features.Roles;
-using CodeInvention.DesireERP.Web.API.Controllers.Base;
+using CodeInvention.CuriosityLab.Web.API.Controllers.Base;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,7 +77,6 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
-
 
         [HttpGet("get-role-by-name/{input}")]
         public async Task<IActionResult> GetRoleByName(string input)
