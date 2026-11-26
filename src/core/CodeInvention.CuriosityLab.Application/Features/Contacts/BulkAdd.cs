@@ -10,7 +10,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
     {
         public record Item(int contactTypeId, string value);
 
-        public record Command(int userId, List<Item> items) : IRequest<IEnumerable<int>>
+        public record Command(int userId, List<Item> items) : IRequest
         {
             public IEnumerable<Contact> ToEntities()
             {
@@ -20,13 +20,13 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
                 {
                     UserId = userId,
                     ContactTypeId = item.contactTypeId,
-                    Value = item.value.Trim().ToLowerInvariant(),
+                    Value = item.value.Trim().ToLower(),
                     CreatedAt = now
                 });
             }
         }
 
-        public class CommandHandler : IRequestHandler<Command, IEnumerable<int>>
+        public class CommandHandler : IRequestHandler<Command>
         {
             private readonly IApplicationDbContext _context;
 
@@ -35,14 +35,12 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
                 _context = context ?? throw new ArgumentNullException(nameof(context));
             }
 
-            public async Task<IEnumerable<int>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task Handle(Command request, CancellationToken cancellationToken)
             {
                 var contacts = request.ToEntities().ToList();
 
                 _context.Contacts.AddRange(contacts);
                 await _context.SaveChangesAsync(cancellationToken);
-
-                return contacts.Select(contact => contact.Id).ToList();
             }
         }
 

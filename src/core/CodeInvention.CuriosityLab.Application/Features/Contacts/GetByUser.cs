@@ -18,17 +18,26 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
 
             public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var contacts = await _context.Contacts
+                // TODO Change this method and start from Users table
+
+                var contacts = await _context.Users
                         .AsNoTracking()
-                        .Include(user => user.User)
-                        .Include(contactType => contactType.ContactType)
-                        .Where(contact => contact.UserId == request.userId)
-                        .Select(contact => new Response(contact.Id, contact.User.Name, contact.ContactType.Name, contact.Value))
+                        .Include(user => user.Contacts)
+                            .ThenInclude(user => user.ContactType)
+                        .Where(user => user.Id == request.userId)
+                        .Select(user => new Response(user.Id, 
+                            user.Name, 
+                            user.Contacts
+                            .Select(contact => new ContactResponse(contact.Id, 
+                                contact.ContactType.Name, 
+                                contact.Value))
+                            .ToList()))
                         .ToListAsync(cancellationToken);
 
                 return contacts;
             }
         }
-        public record Response(int id, string userName, string contactType, string value);
+        public record Response(int id, string userName, IEnumerable<ContactResponse> contacts);
+        public record ContactResponse(int id, string contactType, string value);
     }
 }

@@ -3,6 +3,7 @@ using CodeInvention.CuriosityLab.Domain.Entities;
 using CodeInvention.CuriosityLab.Domain.Enums;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 
@@ -11,7 +12,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
     public class BulkUpdate
     {
         public record Item(int id, int contactTypeId, string value);
-        public record Command(int userId, List<Item> items) : IRequest;
+        public record Command(int userId, List<Item> items) : IRequest; // items = [] size = 200
 
         public class CommandHandler : IRequestHandler<Command>
         {
@@ -24,25 +25,24 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
 
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
-                var itemsById = request.items.ToDictionary(item => item.id);
-                var ids = itemsById.Keys.ToList();
+                var ids = request.items.Select(item => item.id).ToList();
 
-                var contacts = await _context.Contacts
+                var currentContacts = _context.Contacts
                     .Where(contact => ids.Contains(contact.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToList();
 
-                var now = DateTime.UtcNow;
-
-                foreach (var contact in contacts)
+                foreach(var item in request.items)
                 {
-                    var item = itemsById[contact.Id];
+                    var currentContact = currentContacts.FirstOrDefault(contact => contact.Id == item.id);
+                    if (currentContact == null)
+                        continue;
 
-                    contact.ContactTypeId = item.contactTypeId;
-                    contact.Value = item.value.Trim().ToLowerInvariant();
-                    contact.UpdatedAt = now;
+                    currentContact.ContactTypeId = item.contactTypeId;
+                    currentContact.Value = item.value;
+                    currentContact.UpdatedAt = DateTime.UtcNow;
                 }
 
-                await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync();
             }
         }
 

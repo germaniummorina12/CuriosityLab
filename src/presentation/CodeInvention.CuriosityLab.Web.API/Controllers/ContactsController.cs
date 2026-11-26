@@ -30,7 +30,6 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             return NoContent();
         }
 
-
         [HttpGet("read-contact/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -109,6 +108,14 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
         {
             var result = await Mediator.Send(new GetAll.Query());
             return Ok(result);
+        }
+
+
+        [HttpPut("bulk-add")]
+        public async Task<IActionResult> UpdateAdd(UpdateAdd.Command command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }

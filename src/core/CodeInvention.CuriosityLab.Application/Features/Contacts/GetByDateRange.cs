@@ -23,8 +23,8 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
                 var toUtc = DateTime.SpecifyKind(request.untilDate.Date.AddDays(1), DateTimeKind.Utc);
 
                 var contacts = await _context.Contacts
-                    .Include(user => user.User)
-                    .Include(contactType => contactType.ContactType)
+                    .Include(contact => contact.User)
+                    .Include(contact => contact.ContactType)
                     .Where(contact => contact.CreatedAt >= fromUtc && contact.CreatedAt <= toUtc)
                     .Select(contact => new Response(contact.Id, 
                         contact.User.Id, 
@@ -32,9 +32,6 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
                         contact.ContactType.Name, 
                         contact.Value))
                     .ToListAsync(cancellationToken);
-
-                if (contacts == null)
-                    throw new ArgumentException("User doesn't exists.");
 
                 return contacts;
             }

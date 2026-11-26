@@ -20,8 +20,8 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
             {
                 var contact = await _context.Contacts
-                    .Include(user => user.User)
-                    .Include(contactType => contactType.ContactType)
+                    .Include(contact => contact.User)
+                    .Include(contact => contact.ContactType)
                     .FirstOrDefaultAsync(contact => contact.Id == request.id);
 
                 if (contact == null)

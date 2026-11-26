@@ -20,8 +20,8 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
             {
                 var contacts = await _context.Contacts
                         .AsNoTracking()
-                        .Include(user => user.User)
-                        .Include(contactType => contactType.ContactType)
+                        .Include(contact => contact.User)
+                        .Include(contact => contact.ContactType)
                         .Where(contact => contact.ContactTypeId == request.contactTypeId)
                         .Select(contact => new Response(contact.Id, contact.User.Name, contact.ContactType.Name, contact.Value))
                         .ToListAsync(cancellationToken);

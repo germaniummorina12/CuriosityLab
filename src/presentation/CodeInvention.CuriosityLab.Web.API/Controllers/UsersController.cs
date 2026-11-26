@@ -160,5 +160,12 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
             var result = await Mediator.Send(new GetTotalUserRole.Query());
             return Ok(result);
         }
+
+        [HttpGet("user-profile/{id}")]
+        public async Task<IActionResult> GetUserProfile(int id)
+        {
+            var result = await Mediator.Send(new GetUserProfile.Query(id));
+            return Ok(result);
+        }
     }
 }

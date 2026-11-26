@@ -23,7 +23,7 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
                 var ids = request.ids.Distinct().ToList();
 
                 var contacts = await _context.Contacts
-                    .Where(contact => contact.IsDeleted != true && ids.Contains(contact.Id))
+                    .Where(contact => ids.Contains(contact.Id))
                     .ToListAsync(cancellationToken);
 
                 if (contacts.Count != ids.Count)

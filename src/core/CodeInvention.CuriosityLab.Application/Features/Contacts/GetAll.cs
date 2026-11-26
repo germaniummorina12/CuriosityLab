@@ -21,8 +21,8 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
             public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var contacts = await _context.Contacts
-                    .Include(user => user.User)
-                    .Include(contactType => contactType.ContactType)
+                    .Include(contact => contact.User)
+                    .Include(contact => contact.ContactType)
                     .Select(contact => new Response(contact.Id, contact.User.Name, contact.ContactType.Name, contact.Value))
                     .ToListAsync(cancellationToken);
 

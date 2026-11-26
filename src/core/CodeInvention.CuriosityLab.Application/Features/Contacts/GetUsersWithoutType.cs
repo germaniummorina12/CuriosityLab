@@ -19,10 +19,9 @@ namespace CodeInvention.CuriosityLab.Application.Features.Contacts
             public async Task<IEnumerable<Response>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users = await _context.Users
-                    .Include(contact => contact.Contacts)
                     .AsNoTracking()
-                    .Where(user => !_context.Contacts.Any(contact =>
-                        contact.UserId == user.Id &&
+                    .Include(user => user.Contacts)
+                    .Where(user => !user.Contacts.Any(contact =>
                         contact.ContactTypeId == request.contactTypeId))
                     .Select(user => new Response(user.Id, user.Name))
                     .ToListAsync(cancellationToken);
