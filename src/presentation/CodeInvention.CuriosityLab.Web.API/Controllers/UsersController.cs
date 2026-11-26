@@ -1,4 +1,5 @@
 ﻿using CodeInvention.CuriosityLab.Application.Features.Users;
+using CodeInvention.CuriosityLab.Domain.Enums;
 using CodeInvention.CuriosityLab.Web.API.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
@@ -165,6 +166,13 @@ namespace CodeInvention.CuriosityLab.Web.API.Controllers
         public async Task<IActionResult> GetUserProfile(int id)
         {
             var result = await Mediator.Send(new GetUserProfile.Query(id));
+            return Ok(result);
+        }
+
+        [HttpGet("{page}/{size}")]
+        public async Task<IActionResult> GetPaginated(int page = (int)PaginationDefaultsEnum.Page, int size = (int)PaginationDefaultsEnum.Size)
+        {
+            var result = await Mediator.Send(new GetPaginated.Query(page, size));
             return Ok(result);
         }
     }
